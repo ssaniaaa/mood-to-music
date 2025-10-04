@@ -1,36 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Moodify</title>
-  <link rel="stylesheet" href="/style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Moodify — Mood to Music</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1: #a1c4fd;
+      --bg2: #c2e9fb;
+      --card: rgba(255,255,255,0.85);
+      --accent: #4facfe;
+      --muted: #666;
+      --success: #22c55e;
+      --danger: #ef4444;
+    }
+    *{box-sizing: border-box}
+    body{
+      margin:0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:32px;
+      color:#0f172a;
+    }
+
+    .app {
+      width:100%;
+      max-width:820px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), var(--card));
+      border-radius:16px;
+      box-shadow: 0 12px 40px rgba(11,35,73,0.12);
+      padding:28px;
+      backdrop-filter: blur(6px);
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      gap:16px;
+      margin-bottom:12px;
+    }
+    .logo {
+      width:60px;
+      height:60px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:26px;
+      background: linear-gradient(135deg, #ffd54a, #ff7a7a);
+      color:#fff;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+    h1{margin:0;font-size:20px}
+    p.lead{margin:4px 0 18px;color:var(--muted);font-size:14px}
+
+    .input-area{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+
+    textarea#text {
+      flex:1;
+      min-height:130px;
+      padding:14px;
+      border-radius:10px;
+      border:1px solid rgba(15,23,42,0.06);
+      font-size:15px;
+      resize:vertical;
+      outline:none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+
+    .side {
+      width:140px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+    }
+
+    button.primary {
+      background: linear-gradient(90deg, var(--accent), #4ecdff);
+      color:#fff;
+      border:none;
+      padding:10px 14px;
+      border-radius:10px;
+      font-weight:600;
+      cursor:pointer;
+      width:100%;
+      box-shadow: 0 8px 18px rgba(79,172,254,0.18);
+    }
+
+    button.icon {
+      background:#fff;
+      border:1px solid rgba(15,23,42,0.06);
+      width:48px;
+      height:48px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      font-size:18px;
+    }
+
+    .result {
+      margin-top:20px;
+      padding:16px;
+      border-radius:12px;
+      background: rgba(15,23,42,0.03);
+      min-height:72px;
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+
+    .mood-badge {
+      min-width:72px;
+      height:72px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      font-weight:600;
+      color:#fff;
+      font-size:14px;
+    }
+    .mood-emoji { font-size:28px; margin-bottom:6px; }
+
+    .mood-info { flex:1; }
+    .mood-info h3 { margin:0 0 6px 0; font-size:18px; }
+    .mood-info a { text-decoration:none; font-weight:600; display:inline-block; margin-top:6px; }
+
+    /* mood colors */
+    .mood-happy { background: linear-gradient(135deg,#ffd54a,#ff8a65); color:#111 }
+    .mood-calm  { background: linear-gradient(135deg,#7bdff6,#4facfe); }
+    .mood-sad   { background: linear-gradient(135deg,#6aace8,#7b61ff); }
+    .mood-neutral { background: linear-gradient(135deg,#a8b0ff,#f6f8ff); color:#111 }
+
+    /* subtle animation */
+    .fade-in { animation: fadeIn .3s ease both; }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(8px);} to {opacity:1; transform:none;} }
+
+    footer { margin-top:18px; color:var(--muted); font-size:13px; text-align:center; }
+    .small { font-size:12px; color:var(--muted); margin-top:6px; }
+
+    @media (max-width:720px){
+      .input-area { flex-direction:column; }
+      .side { width:100%; flex-direction:row; justify-content:space-between; }
+      .logo { width:48px;height:48px;font-size:20px; }
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🎵 Moodify</h1>
-    <p>Type how you feel and get a playlist that matches your mood.</p>
+  <main class="app">
+    <header>
+      <div class="logo">♪</div>
+      <div>
+        <h1>Moodify</h1>
+        <p class="lead">Type or speak how you feel — we’ll suggest music that fits your vibe.</p>
+      </div>
+    </header>
 
-    <textarea id="text" placeholder="What's on your mind?"></textarea>
-    <button onclick="analyzeMood()">Analyze Mood 🎧</button>
+    <section>
+      <div class="input-area">
+        <textarea id="text" placeholder="Type something like: 'I'm feeling really happy today!'"></textarea>
 
-    <div id="result"></div>
-  </div>
+        <div class="side">
+          <button class="icon" id="micBtn" title="Speak (voice input)">
+            🎤
+          </button>
+          <button class="primary" id="analyzeBtn">Analyze Mood 🎧</button>
+        </div>
+      </div>
+
+      <div id="result" class="result fade-in" style="display:none;">
+        <!-- JS will populate this area -->
+      </div>
+
+      <div class="small">Tip: Try a short sentence describing your feelings, or use the mic to speak.</div>
+    </section>
+
+    <footer>
+      Built with ❤️ — use public Spotify playlists for demo. No login required.
+    </footer>
+  </main>
 
   <script>
-    async function analyzeMood() {
-      const text = document.getElementById('text').value;
-      const res = await fetch('/analyze', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({text})
-      });
-      const data = await res.json();
-      document.getElementById('result').innerHTML = `
-        <h2>Your mood: ${data.mood}</h2>
-        <a href="${data.playlist}" target="_blank">🎶 Open Playlist</a>
+    // Helper: show a result block
+    function showResult(mood, emoji, playlistUrl) {
+      const r = document.getElementById('result');
+      r.style.display = 'flex';
+
+      // determine badge class
+      let cls = 'mood-neutral';
+      if (mood.toLowerCase() === 'happy') cls = 'mood-happy';
+      else if (mood.toLowerCase() === 'calm') cls = 'mood-calm';
+      else if (mood.toLowerCase() === 'sad') cls = 'mood-sad';
+
+      r.innerHTML = `
+        <div class="mood-badge ${cls}">
+          <div class="mood-emoji">${emoji}</div>
+          <div>${mood}</div>
+        </div>
+        <div class="mood-info">
+          <h3>Playlist suggestion</h3>
+          <div>Here’s a playlist that matches your mood — open in Spotify to listen.</div>
+          <a href="${playlistUrl}" target="_blank" rel="noopener">🎶 Open on Spotify</a>
+        </div>
       `;
     }
+
+    // Map mood to default emoji and playlist (fallback client-side)
+    function fallbackMapping(mood) {
+      mood = mood.toLowerCase();
+      if (mood.includes('happy')) return {emoji:'😄', url:'https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC'};
+      if (mood.includes('calm') || mood.includes('relax')) return {emoji:'😌', url:'https://open.spotify.com/playlist/37i9dQZF1DWU0ScTcjJBdj'};
+      if (mood.includes('sad') || mood.includes('lonely')) return {emoji:'😢', url:'https://open.spotify.com/playlist/7ABD15iASBIpPP5uJ5awvq'};
+      return {emoji:'🙂', url:'https://open.spotify.com/playlist/37i9dQZF1DX4WYpdgoIcn6'};
+    }
+
+    // call the backend to analyze
+    async function analyzeText(text) {
+      try {
+        const resp = await fetch('/analyze', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ text })
+        });
+
+        if (!resp.ok) {
+          // fallback to simple client-side mapping if server returns error
+          const fallback = fallbackMapping('neutral');
+          showResult('Neutral', fallback.emoji, fallback.url);
+          return;
+        }
+
+        const data = await resp.json();
+        // expected response: { mood: "...", playlist: "https://..." }
+        const mood = data.mood || 'Neutral';
+        const playlist = data.playlist || fallbackMapping(mood).url;
+        const emoji = data.emoji || fallbackMapping(mood).emoji;
+        showResult(mood, emoji, playlist);
+
+      } catch (err) {
+        console.error(err);
+        const fallback = fallbackMapping('neutral');
+        showResult('Neutral', fallback.emoji, fallback.url);
+      }
+    }
+
+    // UI handlers
+    document.getElementById('analyzeBtn').addEventListener('click', () => {
+      const txt = document.getElementById('text').value.trim();
+      if (!txt) {
+        alert('Please type something or use the mic to speak.');
+        return;
+      }
+      analyzeText(txt);
+    });
+
+    // Voice input using Web Speech API (works in Chrome/Edge; Safari uses webkit prefix)
+    const micBtn = document.getElementById('micBtn');
+    micBtn.addEventListener('click', () => startVoiceInput());
+
+    function startVoiceInput() {
+      // prefer standard, fallback to webkitSpeechRecognition
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert('Voice input is not supported in this browser. Use Chrome, Edge, or a compatible browser.');
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      micBtn.disabled = true;
+      micBtn.textContent = '🎙️...';
+
+      recognition.start();
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('text').value = transcript;
+        analyzeText(transcript);
+      };
+
+      recognition.onend = () => {
+        micBtn.disabled = false;
+        micBtn.textContent = '🎤';
+      };
+
+      recognition.onerror = (err) => {
+        console.error('Speech recognition error', err);
+        micBtn.disabled = false;
+        micBtn.textContent = '🎤';
+      };
+    }
+
+    // Optional: run a demo example on first load (comment out if not desired)
+    // window.addEventListener('load', () => {
+    //   // analyzeText("I'm feeling a bit tired but hopeful today.");
+    // });
+
   </script>
 </body>
 </html>
-
