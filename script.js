@@ -27,35 +27,73 @@ function showResult(mood, emoji, playlistUrl) {
     frame.src = playlistUrl.replace("open.spotify.com/playlist/", "open.spotify.com/embed/playlist/");
   }
   
-  function fallbackMapping(mood) {
-    mood = mood.toLowerCase();
-    if (mood.includes('happy') || mood.includes('excited') || mood.includes('energetic'))
-      return {emoji:'😄', url:'https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC'};
-    if (mood.includes('calm') || mood.includes('relax') || mood.includes('peaceful'))
-      return {emoji:'😌', url:'https://open.spotify.com/playlist/37i9dQZF1DWU0ScTcjJBdj'};
-    if (mood.includes('sad') || mood.includes('lonely') || mood.includes('heartbroken'))
-      return {emoji:'😢', url:'https://open.spotify.com/playlist/7ABD15iASBIpPP5uJ5awvq'};
-    if (mood.includes('angry') || mood.includes('mad') || mood.includes('frustrated'))
-      return {emoji:'😠', url:'https://open.spotify.com/playlist/37i9dQZF1DWY6vTWIdZ54A'};
-    return {emoji:'🙂', url:'https://open.spotify.com/playlist/37i9dQZF1DX4WYpdgoIcn6'};
-  }
-  
-  async function analyzeText(text) {
-    const lower = text.toLowerCase();
-    let mood = "Neutral";
-  
-    if (lower.includes("happy") || lower.includes("excited") || lower.includes("great"))
-      mood = "Happy";
-    else if (lower.includes("sad") || lower.includes("down") || lower.includes("lonely"))
-      mood = "Sad";
-    else if (lower.includes("calm") || lower.includes("relaxed") || lower.includes("peaceful"))
-      mood = "Calm";
-    else if (lower.includes("angry") || lower.includes("mad") || lower.includes("frustrated"))
-      mood = "Angry";
-  
-    const data = fallbackMapping(mood);
-    showResult(mood, data.emoji, data.url);
-  }
+  function fallbackMapping(mood) { 
+  mood = mood.toLowerCase();
+
+  // Happy / Energetic
+  if (mood.includes('happy') || mood.includes('excited') || mood.includes('energetic'))
+    return {emoji:'😄', url:'https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC'};
+
+  // Calm / Peaceful / Chill
+  if (mood.includes('calm') || mood.includes('relax') || mood.includes('peaceful') || mood.includes('chill'))
+    return {emoji:'😌', url:'https://open.spotify.com/playlist/37i9dQZF1DWU0ScTcjJBdj'};
+
+  // Sad / Lonely / Heartbroken
+  if (mood.includes('sad') || mood.includes('lonely') || mood.includes('heartbroken') || mood.includes('depressed'))
+    return {emoji:'💔', url:'https://open.spotify.com/playlist/37i9dQZF1DX7qK8ma5wgG1'};
+
+  // Romantic / Love
+  if (mood.includes('romantic') || mood.includes('love') || mood.includes('affection') || mood.includes('date'))
+    return {emoji:'❤️', url:'https://open.spotify.com/playlist/37i9dQZF1DX50QitC6Oqtn'};
+
+  // Party / Fun / Dance
+  if (mood.includes('party') || mood.includes('dance') || mood.includes('fun') || mood.includes('celebrate'))
+    return {emoji:'🎉', url:'https://open.spotify.com/playlist/37i9dQZF1DXaXB8fQg7xif'};
+
+  // Instrumental / Focus / Study
+  if (mood.includes('instrumental') || mood.includes('focus') || mood.includes('study') || mood.includes('work'))
+    return {emoji:'🎵', url:'https://open.spotify.com/playlist/37i9dQZF1DX8Uebhn9wzrS'};
+
+  // Gym / Workout / Pumped
+  if (mood.includes('gym') || mood.includes('workout') || mood.includes('training') || mood.includes('motivation'))
+    return {emoji:'💪', url:'https://open.spotify.com/playlist/37i9dQZF1DX70RN3TfWWJh'};
+
+  // Angry / Frustrated
+  if (mood.includes('angry') || mood.includes('mad') || mood.includes('frustrated'))
+    return {emoji:'😠', url:'https://open.spotify.com/playlist/37i9dQZF1DWY6vTWIdZ54A'};
+
+  // Default (Neutral)
+  return {emoji:'🙂', url:'https://open.spotify.com/playlist/37i9dQZF1DX4WYpdgoIcn6'};
+}
+
+
+async function analyzeText(text) {
+  const lower = text.toLowerCase();
+  let mood = "Neutral";
+
+  if (lower.includes("happy") || lower.includes("excited") || lower.includes("great"))
+    mood = "Happy";
+  else if (lower.includes("sad") || lower.includes("lonely") || lower.includes("down"))
+    mood = "Sad";
+  else if (lower.includes("heartbroken") || lower.includes("broken"))
+    mood = "Heartbroken";
+  else if (lower.includes("romantic") || lower.includes("love") || lower.includes("affection"))
+    mood = "Romantic";
+  else if (lower.includes("party") || lower.includes("dance") || lower.includes("fun"))
+    mood = "Party";
+  else if (lower.includes("calm") || lower.includes("peaceful") || lower.includes("relaxed"))
+    mood = "Calm";
+  else if (lower.includes("instrumental") || lower.includes("focus") || lower.includes("study"))
+    mood = "Instrumental";
+  else if (lower.includes("gym") || lower.includes("workout") || lower.includes("training"))
+    mood = "Gym";
+  else if (lower.includes("angry") || lower.includes("mad") || lower.includes("frustrated"))
+    mood = "Angry";
+
+  const { emoji, url } = fallbackMapping(mood);
+  showResult(mood, emoji, url);
+}
+
   
   document.getElementById('analyzeBtn').addEventListener('click', () => {
     const txt = document.getElementById('text').value.trim();
