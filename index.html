@@ -1,69 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mood → Music Recommender</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mood-to-Music</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
   <link rel="stylesheet" href="app.css">
 </head>
 <body>
-  <div class="container">
-    <h1>🎵 Mood → Music Recommender 🎶</h1>
-    <p class="tagline">Turn your feelings into playlists instantly.</p>
+  <!-- Dark/Light Mode Toggle -->
+  <button id="toggleDarkMode" class="dark-toggle">🌙</button>
 
-    <textarea id="moodText" placeholder="How are you feeling today?"></textarea>
-    <div class="buttons">
-      <button id="analyzeBtn">Analyze Mood</button>
-    </div>
+  <main class="app glass">
+    <header>
+      <div class="logo">♪</div>
+      <div>
+        <h1>Mood-to-Music</h1>
+        <p class="lead">Because every mood deserves a beat.</p>
+      </div>
+    </header>
 
-    <div class="result">
-      <h2>Your Mood: <span id="moodLabel">---</span></h2>
-      <div id="playlistArea"></div>
-    </div>
-  </div>
+    <section>
+      <div class="input-area">
+        <textarea id="text" placeholder="Type something like: 'Feeling chill and cozy today'"></textarea>
 
-  <script>
-    const MOOD_INFO = {
-      happy: { emoji: "😄", links: [
-        {title: "Happy Hits", url: "https://open.spotify.com/search/happy%20hits"},
-        {title: "Feel-Good Pop", url: "https://open.spotify.com/search/feel%20good%20pop"}
-      ]},
-      chill: { emoji: "🌙", links: [
-        {title: "Chill Vibes", url: "https://open.spotify.com/search/chill%20vibes"},
-        {title: "Lo-Fi Beats", url: "https://open.spotify.com/search/lofi%20beats"}
-      ]},
-      sad: { emoji: "💙", links: [
-        {title: "Sad Songs", url: "https://open.spotify.com/search/sad%20songs"},
-        {title: "Calming Acoustic", url: "https://open.spotify.com/search/acoustic%20calm"}
-      ]}
-    };
+        <div class="side">
+          <button class="icon" id="micBtn" title="Speak (voice input)">🎤</button>
+          <button class="primary" id="analyzeBtn">Find My Mood 🎧</button>
+        </div>
+      </div>
 
-    function analyzeMood(text) {
-      text = text.toLowerCase();
-      if (text.includes("happy") || text.includes("excited")) return "happy";
-      if (text.includes("sad") || text.includes("tired") || text.includes("upset")) return "sad";
-      return "chill";
-    }
+      <button id="spotifyBtn" class="spotify-btn">🎵 Start Spotify Session</button>
+      <button id="jamBtn" class="jam-btn">🎶 Start a Jam</button>
+      <div id="jamInfo" class="jam-info"></div>
 
-    document.getElementById("analyzeBtn").onclick = () => {
-      const text = document.getElementById("moodText").value;
-      const mood = analyzeMood(text);
-      document.getElementById("moodLabel").textContent = mood;
-      showPlaylists(mood);
-    };
+      <div id="result" class="result fade-in" style="display:none;"></div>
 
-    function showPlaylists(mood) {
-      const area = document.getElementById("playlistArea");
-      area.innerHTML = "";
-      MOOD_INFO[mood].links.forEach(link => {
-        const a = document.createElement("a");
-        a.href = link.url;
-        a.textContent = link.title;
-        a.target = "_blank";
-        area.appendChild(a);
-        area.appendChild(document.createElement("br"));
-      });
-    }
-  </script>
+      <section id="spotifyEmbed" class="spotify-embed" style="display:none;">
+        <h3>Now Playing:</h3>
+        <iframe id="playlistFrame" style="border-radius:12px" width="100%" height="352"
+          frameBorder="0" allowfullscreen=""
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"></iframe>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
