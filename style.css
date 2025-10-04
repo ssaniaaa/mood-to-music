@@ -32,8 +32,16 @@ body{
   backdrop-filter: blur(6px);
 }
 
-header{display:flex; align-items:center; gap:16px; margin-bottom:12px;}
-.logo { width:60px; height:60px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:26px; background: linear-gradient(135deg, #ffd54a, #ff7a7a); color:#fff; box-shadow: 0 6px 18px rgba(0,0,0,0.08);}
+header {
+  display: flex;
+  flex-direction: column;   /* stack logo and text vertically */
+  align-items: center;      /* center horizontally */
+  text-align: center;       /* center text inside header */
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+
 h1{margin:0;font-size:20px}
 p.lead{margin:4px 0 18px;color:var(--muted);font-size:14px}
 
