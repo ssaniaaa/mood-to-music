@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mood → Music Recommender</title>
+</head>
+<body>
+  <h1>🎵 Mood → Music Recommender 🎶</h1>
+  <p>Type or say how you feel, and we’ll match you with the perfect playlist.</p>
+
+  <textarea id="moodText" placeholder="I feel happy and relaxed..."></textarea><br>
+  <button id="analyzeBtn">Analyze Mood</button>
+  <button id="micBtn">🎤 Start Voice</button>
+  <button id="stopBtn">Stop Voice</button>
+
+  <h3>Your Mood: <span id="moodLabel">---</span></h3>
+  <div id="playlistArea"></div>
+
+<script>
+const MOOD_INFO = {
+  happy:   { emoji:"😄", links:[
+    {title:"Happy Hits", url:"https://open.spotify.com/search/happy%20hits"},
+    {title:"Feel-Good Pop", url:"https://open.spotify.com/search/feel%20good%20pop"}
+  ]},
+  chill:   { emoji:"🌙", links:[
+    {title:"Chill Vibes", url:"https://open.spotify.com/search/chill%20vibes"},
+    {title:"Lo-Fi Beats", url:"https://open.spotify.com/search/lofi%20beats"}
+  ]},
+  sad:     { emoji:"💙", links:[
+    {title:"Sad Songs", url:"https://open.spotify.com/search/sad%20songs"},
+    {title:"Acoustic Calm", url:"https://open.spotify.com/search/acoustic%20calm"}
+  ]}
+};
+
+function analyzeMood(text){
+  text = text.toLowerCase();
+  if (text.includes("happy")) return "happy";
+  if (text.includes("relax") || text.includes("calm") || text.includes("chill")) return "chill";
+  if (text.includes("sad") || text.includes("tired") || text.includes("upset")) return "sad";
+  return "chill";
+}
+
+document.getElementById("analyzeBtn").onclick = ()=>{
+  const text = document.getElementById("moodText").value;
+  const mood = analyzeMood(text);
+  document.getElementById("moodLabel").textContent = mood;
+  showPlaylists(mood);
+};
+
+function showPlaylists(mood){
+  const div = document.getElementById("playlistArea");
+  div.innerHTML = "";
+  MOOD_INFO[mood].links.forEach(pl=>{
+    const a = document.createElement("a");
+    a.href = pl.url;
+    a.textContent = pl.title;
+    a.target = "_blank";
+    div.appendChild(a);
+    div.appendChild(document.createElement("br"));
+  });
+}
+</script>
+</body>
+</html>
