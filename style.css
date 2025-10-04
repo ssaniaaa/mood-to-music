@@ -42,6 +42,15 @@ header {
 }
 
 
+header .logo {
+  width: 100px;            /* bigger logo */
+  height: 100px;           /* bigger logo */
+  font-size: 80px;         /* bigger musical note */
+  text-align: center;
+  color:#4ecdff
+}
+
+
 h1{margin:0;font-size:20px}
 p.lead{margin:4px 0 18px;color:var(--muted);font-size:14px}
 
@@ -181,4 +190,24 @@ body.dark-mode .jam-inputs input {
   background: #2c2f3a;
   border: 1px solid #444;
   color: #eee;
+}
+button.icon {
+  background: linear-gradient(90deg, var(--accent), #4ecdff); /* match primary button color or keep white if desired */
+  color: #fff;                    /* white icon for contrast */
+  border: none;                    /* remove border */
+  width: 100%;                     /* match primary button width */
+  padding: 10px 14px;              /* same padding as primary button */
+  border-radius: 10px;             /* same as primary */
+  font-size: 18px;                 /* adjust icon size */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(79,172,254,0.18); /* match primary button shadow */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button.icon:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 25px rgba(79,172,254,0.25);
 }
