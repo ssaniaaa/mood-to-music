@@ -35,13 +35,16 @@
           <button class="primary" id="analyzeBtn">Analyze Mood 🎧</button>
         </div>
       </div>
-      <div class="add-jam-section" style="margin-top:20px; padding:16px; border:1px dashed #aaa; border-radius:12px;">
-    <h3>Add a Jam 🎵</h3>
-    <input type="text" id="jamMood" placeholder="Mood (happy, sad, calm...)" style="padding:8px; border-radius:6px; width:48%; margin-right:4%;" />
-    <input type="text" id="jamURL" placeholder="Spotify Playlist or Track URL" style="padding:8px; border-radius:6px; width:48%;" />
-    <button id="addJamBtn" class="primary" style="margin-top:10px; width:100%;">Add Jam</button>
-     <div id="jamFeedback" style="margin-top:6px; font-size:13px; color:var(--muted);"></div>
-     </div>
+      <div class="add-jam-section">
+      <h3>Add a Jam 🎵</h3>
+        <div class="jam-inputs">
+        <input type="text" id="jamMood" placeholder="Mood (happy, sad, calm...)" />
+        <input type="text" id="jamURL" placeholder="Spotify Playlist or Track URL" />
+        </div>
+        <button id="addJamBtn" class="primary">Add Jam</button>
+        <div id="jamFeedback" class="jam-feedback"></div>
+        </div>
+
 
 
       <div id="result" class="result fade-in" style="display:none;">

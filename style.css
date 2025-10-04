@@ -97,3 +97,80 @@ body.dark-mode .small,
 body.dark-mode p.lead {
   color: #bbb;
 }
+.add-jam-section {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f0f4ff, #d9e4ff);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.add-jam-section:hover {
+  transform: translateY(-4px);
+}
+
+.add-jam-section h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #0f172a;
+}
+
+.jam-inputs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.jam-inputs input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(15,23,42,0.2);
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.jam-inputs input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(79,172,254,0.2);
+}
+
+#addJamBtn.primary {
+  width: 100%;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#addJamBtn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(79,172,254,0.3);
+}
+
+.jam-feedback {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  min-height: 18px;
+  transition: all 0.3s ease;
+}
+
+/* Dark mode tweaks */
+body.dark-mode .add-jam-section {
+  background: linear-gradient(135deg, #1c1f2a, #262b3a);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+body.dark-mode .add-jam-section h3,
+body.dark-mode .jam-inputs input,
+body.dark-mode .jam-feedback {
+  color: #eee;
+}
+
+body.dark-mode .jam-inputs input {
+  background: #2c2f3a;
+  border: 1px solid #444;
+  color: #eee;
+}
