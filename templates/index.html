@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mood-to-Music</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body>
+  <!-- 🌙 Dark mode toggle -->
+  <button id="toggleDarkMode" class="dark-toggle">🌙</button>
+
+  <main class="app">
+    <header>
+      <div class="logo">♪</div>
+      <div>
+        <h1>Mood-to-Music</h1>
+        <p class="lead">Because every mood deserves a beat.</p>
+      </div>
+    </header>
+
+    <section>
+      <!-- User input area -->
+      <div class="input-area">
+        <textarea id="text" placeholder="Type something like: 'Feeling chill and cozy today'"></textarea>
+
+        <!-- 🌍 Language selector -->
+        <select id="languageSelect" class="language-select">
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+          <option value="hi">Hindi</option>
+          <option value="ur">Urdu</option>
+        </select>
+
+        <div class="side">
+          <button class="icon" id="micBtn" title="Speak (voice input)">🎤</button>
+          <button class="primary" id="analyzeBtn">Find My Mood 🎧</button>
+        </div>
+      </div>
+
+      <!-- Spotify session button -->
+      <button id="spotifyBtn" class="spotify-btn">🎵 Start Spotify Session</button>
+
+      <!-- Results area -->
+      <div id="result" class="result fade-in" style="display:none;"></div>
+    </section>
+
+    <footer>
+      <p class="small">Built with ❤️ for music lovers worldwide.</p>
+    </footer>
+  </main>
+
+  <!-- External JS -->
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>
