@@ -1,3 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Moodify</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🎵 Moodify</h1>
+    <p>Type how you feel and get a playlist that matches your mood.</p>
+
+    <textarea id="text" placeholder="What's on your mind?"></textarea>
+    <button onclick="analyzeMood()">Analyze Mood 🎧</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    async function analyzeMood() {
+      const text = document.getElementById('text').value;
+      const res = await fetch('/analyze', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({text})
+      });
+      const data = await res.json();
+      document.getElementById('result').innerHTML = `
+        <h2>Your mood: ${data.mood}</h2>
+        <a href="${data.playlist}" target="_blank">🎶 Open Playlist</a>
+      `;
+    }
+  </script>
+</body>
+</html>
 
