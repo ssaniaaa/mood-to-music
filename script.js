@@ -244,3 +244,17 @@ jamBtn.addEventListener('click', () => {
     jamInfo.textContent = "⚠️ Location access denied. Please allow location to start a jam.";
   }
 });
+
+// Sign In Button - Redirect to login page
+const authBtn = document.getElementById('authBtn');
+let isSignedIn = false;
+
+authBtn.addEventListener('click', () => {
+  if (!isSignedIn) {
+    // Redirect to login page
+    window.location.href = 'login.html';
+  } else {
+    // Show account menu or options
+    alert('Account options: Profile, Settings, Sign Out');
+  }
+});

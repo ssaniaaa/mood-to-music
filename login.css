@@ -1,4 +1,4 @@
-/* BASE & RESET */
+//* BASE & RESET */
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
 body { background: url("pexels-anthonyshkraba-production-8044225.jpg") center/cover no-repeat; height: 100vh; display: flex; justify-content: center; align-items: center; }
 
