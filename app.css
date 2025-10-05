@@ -1,7 +1,5 @@
 /* =========================================================
    MOOD-TO-MUSIC — PREMIUM LIGHT + DARK THEME DESIGN
-   ========================================================= */
-
 /* RESET & BASE */
 * {
     box-sizing: border-box;
@@ -266,3 +264,26 @@
     .lead { font-size: 1.2rem; }
   }
   
+/* --- SIGN IN / SIGN UP BUTTON --- */
+.signin-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(90deg, #ff5c5c, #ff2a2a);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.signin-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.dark-mode .signin-btn {
+  background: linear-gradient(90deg, #ff7b7b, #ff4c4c);
+}

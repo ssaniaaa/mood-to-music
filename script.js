@@ -1,3 +1,64 @@
+// --- AUTHENTICATION (Sign In / Sign Up) ---
+// Create references to auth elements
+const signInBtn = document.getElementById('signInBtn');
+const signUpBtn = document.getElementById('signUpBtn');
+const authMessage = document.getElementById('authMessage');
+
+if (signUpBtn && signInBtn && authMessage) {
+  signUpBtn.addEventListener('click', () => {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    
+    if (!email || !password) {
+      authMessage.textContent = "❌ Please enter email and password.";
+      return;
+    }
+
+    const users = JSON.parse(localStorage.getItem('users') || '{}');
+
+    if (users[email]) {
+      authMessage.textContent = "⚠️ Email already registered. Try signing in.";
+      return;
+    }
+
+    users[email] = password;
+    localStorage.setItem('users', JSON.stringify(users));
+    authMessage.textContent = "✅ Sign up successful! Opening app...";
+    
+    setTimeout(() => {
+      window.open('app.html', '_blank'); // Open app in new tab
+    }, 1000);
+  });
+
+  signInBtn.addEventListener('click', () => {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    if (!email || !password) {
+      authMessage.textContent = "❌ Please enter email and password.";
+      return;
+    }
+
+    const users = JSON.parse(localStorage.getItem('users') || '{}');
+
+    if (!users[email]) {
+      authMessage.textContent = "⚠️ Email not registered. Please sign up.";
+      return;
+    }
+
+    if (users[email] !== password) {
+      authMessage.textContent = "❌ Incorrect password. Try again.";
+      return;
+    }
+
+    authMessage.textContent = "✅ Sign in successful! Opening app...";
+    
+    setTimeout(() => {
+      window.open('app.html', '_blank'); // Open app in new tab
+    }, 1000);
+  });
+}
+
 // --- MOOD DETECTION LOGIC (with full emoji + word support) ---
 function showResult(mood, emoji, playlistUrl) {
   const r = document.getElementById('result');
