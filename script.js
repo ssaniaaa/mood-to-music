@@ -1,4 +1,4 @@
-// --- MOOD DETECTION LOGIC (with full emoji support) ---
+// --- MOOD DETECTION LOGIC (with full emoji + word support) ---
 function showResult(mood, emoji, playlistUrl) {
   const r = document.getElementById('result');
   const embed = document.getElementById('spotifyEmbed');
@@ -26,50 +26,29 @@ function showResult(mood, emoji, playlistUrl) {
   frame.src = playlistUrl.replace("open.spotify.com/playlist/", "open.spotify.com/embed/playlist/");
 }
 
-// --- EMOJI TO PLAYLIST MAP (exact match) ---
+// --- EMOJI MAP ---
 const emojiMap = {
   '😄': { mood: 'Happy', url: 'https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC' },
   '😊': { mood: 'Happy', url: 'https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC' },
   '😁': { mood: 'Happy', url: 'https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC' },
   '🙂': { mood: 'Happy', url: 'https://open.spotify.com/playlist/37i9dQZF1DXdPec7aLTmlC' },
-
   '😌': { mood: 'Calm', url: 'https://open.spotify.com/playlist/37i9dQZF1DWU0ScTcjJBdj' },
   '🌿': { mood: 'Calm', url: 'https://open.spotify.com/playlist/37i9dQZF1DWU0ScTcjJBdj' },
   '🧘': { mood: 'Calm', url: 'https://open.spotify.com/playlist/37i9dQZF1DWU0ScTcjJBdj' },
-
   '😢': { mood: 'Sad', url: 'https://open.spotify.com/playlist/37i9dQZF1DX7qK8ma5wgG1' },
   '😭': { mood: 'Sad', url: 'https://open.spotify.com/playlist/37i9dQZF1DX7qK8ma5wgG1' },
   '💔': { mood: 'Heartbroken', url: 'https://open.spotify.com/playlist/37i9dQZF1DX7qK8ma5wgG1' },
-
   '❤️': { mood: 'Romantic', url: 'https://open.spotify.com/playlist/37i9dQZF1DX50QitC6Oqtn' },
   '😍': { mood: 'Romantic', url: 'https://open.spotify.com/playlist/37i9dQZF1DX50QitC6Oqtn' },
-  '💕': { mood: 'Romantic', url: 'https://open.spotify.com/playlist/37i9dQZF1DX50QitC6Oqtn' },
-  '🥰': { mood: 'Romantic', url: 'https://open.spotify.com/playlist/37i9dQZF1DX50QitC6Oqtn' },
-
   '🎉': { mood: 'Party', url: 'https://open.spotify.com/playlist/37i9dQZF1DXaXB8fQg7xif' },
-  '🎊': { mood: 'Party', url: 'https://open.spotify.com/playlist/37i9dQZF1DXaXB8fQg7xif' },
-  '🕺': { mood: 'Party', url: 'https://open.spotify.com/playlist/37i9dQZF1DXaXB8fQg7xif' },
-  '💃': { mood: 'Party', url: 'https://open.spotify.com/playlist/37i9dQZF1DXaXB8fQg7xif' },
-  '😎': { mood: 'Party', url: 'https://open.spotify.com/playlist/37i9dQZF1DXaXB8fQg7xif' },
-
   '🎵': { mood: 'Instrumental', url: 'https://open.spotify.com/playlist/37i9dQZF1DX8Uebhn9wzrS' },
-  '🎻': { mood: 'Instrumental', url: 'https://open.spotify.com/playlist/37i9dQZF1DX8Uebhn9wzrS' },
-  '🎶': { mood: 'Instrumental', url: 'https://open.spotify.com/playlist/37i9dQZF1DX8Uebhn9wzrS' },
-  '🎧': { mood: 'Instrumental', url: 'https://open.spotify.com/playlist/37i9dQZF1DX8Uebhn9wzrS' },
-
   '💪': { mood: 'Gym', url: 'https://open.spotify.com/playlist/37i9dQZF1DX70RN3TfWWJh' },
-  '🏋️': { mood: 'Gym', url: 'https://open.spotify.com/playlist/37i9dQZF1DX70RN3TfWWJh' },
-  '🏋️‍♂️': { mood: 'Gym', url: 'https://open.spotify.com/playlist/37i9dQZF1DX70RN3TfWWJh' },
-  '🏋️‍♀️': { mood: 'Gym', url: 'https://open.spotify.com/playlist/37i9dQZF1DX70RN3TfWWJh' },
-
-  '😠': { mood: 'Angry', url: 'https://open.spotify.com/playlist/37i9dQZF1DWY6vTWIdZ54A' },
-  '😡': { mood: 'Angry', url: 'https://open.spotify.com/playlist/37i9dQZF1DWY6vTWIdZ54A' },
-  '🤬': { mood: 'Angry', url: 'https://open.spotify.com/playlist/37i9dQZF1DWY6vTWIdZ54A' }
+  '😠': { mood: 'Angry', url: 'https://open.spotify.com/playlist/37i9dQZF1DWY6vTWIdZ54A' }
 };
 
-// Normalize emoji (fix 🏋️‍♂️ → 🏋️)
+// Normalize emoji (remove variation selectors)
 function normalizeEmoji(e) {
-  return e.replace(/[\uFE0E\uFE0F]/g, ''); // remove variation selectors
+  return e.replace(/[\uFE0E\uFE0F]/g, '');
 }
 
 // Extract all emojis (supports complex ones)
@@ -78,6 +57,20 @@ function extractEmojis(text) {
   return text.match(regex) || [];
 }
 
+// --- WORD KEYWORDS MAP ---
+const wordMap = {
+  Happy: ["happy", "excited", "great", "joy", "amazing", "good"],
+  Sad: ["sad", "down", "lonely", "unhappy", "depressed"],
+  Heartbroken: ["heartbroken", "broken", "hurting", "love lost"],
+  Romantic: ["romantic", "love", "loving", "crush", "affection"],
+  Party: ["party", "dance", "fun", "celebrate", "night"],
+  Calm: ["calm", "relaxed", "peaceful", "chill", "cozy"],
+  Instrumental: ["instrumental", "study", "focus", "work", "concentrate"],
+  Gym: ["gym", "workout", "training", "exercise", "fit"],
+  Angry: ["angry", "mad", "frustrated", "annoyed", "upset"]
+};
+
+// Analyze text for emojis and words
 async function analyzeText(text) {
   const lower = text.toLowerCase();
   const emojis = extractEmojis(text).map(normalizeEmoji);
@@ -95,25 +88,21 @@ async function analyzeText(text) {
   }
 
   // Step 2: Word-based detection
-  if (lower.includes("happy") || lower.includes("excited") || lower.includes("great"))
-    ({ mood, emoji, playlistUrl } = { mood: "Happy", ...emojiMap["😄"] });
-  else if (lower.includes("sad") || lower.includes("lonely") || lower.includes("down"))
-    ({ mood, emoji, playlistUrl } = { mood: "Sad", ...emojiMap["😢"] });
-  else if (lower.includes("heartbroken") || lower.includes("broken"))
-    ({ mood, emoji, playlistUrl } = { mood: "Heartbroken", ...emojiMap["💔"] });
-  else if (lower.includes("romantic") || lower.includes("love"))
-    ({ mood, emoji, playlistUrl } = { mood: "Romantic", ...emojiMap["❤️"] });
-  else if (lower.includes("party") || lower.includes("dance") || lower.includes("fun"))
-    ({ mood, emoji, playlistUrl } = { mood: "Party", ...emojiMap["🎉"] });
-  else if (lower.includes("calm") || lower.includes("peaceful") || lower.includes("relaxed"))
-    ({ mood, emoji, playlistUrl } = { mood: "Calm", ...emojiMap["😌"] });
-  else if (lower.includes("instrumental") || lower.includes("focus") || lower.includes("study"))
-    ({ mood, emoji, playlistUrl } = { mood: "Instrumental", ...emojiMap["🎵"] });
-  else if (lower.includes("gym") || lower.includes("workout") || lower.includes("training"))
-    ({ mood, emoji, playlistUrl } = { mood: "Gym", ...emojiMap["💪"] });
-  else if (lower.includes("angry") || lower.includes("mad") || lower.includes("frustrated"))
-    ({ mood, emoji, playlistUrl } = { mood: "Angry", ...emojiMap["😠"] });
+  for (const [m, keywords] of Object.entries(wordMap)) {
+    for (const word of keywords) {
+      if (lower.includes(word)) {
+        // Pick the first emoji in emojiMap that matches this mood
+        const em = Object.keys(emojiMap).find(k => emojiMap[k].mood.toLowerCase() === m.toLowerCase());
+        mood = m;
+        emoji = em || "🙂";
+        playlistUrl = emojiMap[emoji].url;
+        showResult(mood, emoji, playlistUrl);
+        return;
+      }
+    }
+  }
 
+  // Step 3: Default Neutral
   showResult(mood, emoji, playlistUrl);
 }
 
